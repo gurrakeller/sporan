@@ -1,0 +1,20 @@
+{
+  "github.search_issues": [
+    {"id": "101", "title": "Memory leak in worker pool", "comments": 8, "labels": ["bug"]},
+    {"id": "102", "title": "Improve documentation", "comments": 2, "labels": ["docs"]},
+    {"id": "103", "title": "Critical crash on startup", "comments": 12, "labels": ["bug"]}
+  ],
+  "github.get_issue": {
+    "$match": "id",
+    "cases": {
+      "101": {"id": "101", "title": "Memory leak in worker pool", "severity": "high", "author": "alice"},
+      "102": {"id": "102", "title": "Improve documentation", "severity": "low", "author": "bob"},
+      "103": {"id": "103", "title": "Critical crash on startup", "severity": "critical", "author": "charlie"}
+    },
+    "default": {"$error": "Issue not found"}
+  },
+  "slack.post": {
+    "status": "delivered",
+    "timestamp": 1718000000
+  }
+}

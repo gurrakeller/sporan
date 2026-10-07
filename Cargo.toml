@@ -1,0 +1,18 @@
+[package]
+name = "speran"
+version = "0.1.0"
+edition = "2021"
+description = "A small, safe, token-efficient language that LLM agents write and a sandboxed runtime executes."
+license = "MIT"
+authors = ["Gustav Keller"]
+repository = "https://github.com/gurrakeller/axon"
+keywords = ["language", "interpreter", "llm", "agents", "sandbox"]
+categories = ["compilers", "development-tools"]
+
+[dependencies]
+indexmap = "2"
+serde_json = { version = "1", features = ["preserve_order"] }
+
+[[bin]]
+name = "speran"
+path = "src/main.rs"

@@ -1,0 +1,35 @@
+# 02_agent_workflow.spe: Realistic agent multi-tool workflow
+
+use github.search_issues, github.get_issue, slack.post
+
+# Step 1: Search for open bug issues
+issues = github.search_issues(repo: "acme/api", label: "bug")
+emit "Found {len(issues)} issues to inspect"
+
+# Step 2: Fetch details concurrently with `par`
+details = par issue in issues {
+  github.get_issue(id: issue.id)
+}
+
+# Step 3: Filter for critical or high severity
+critical = [d for d in details if d.severity == "critical" or d.severity == "high"]
+
+# Step 4: Post summary to slack safely using `try`
+post_result = try slack.post(
+  channel: "#alerts",
+  text: "Found {len(critical)} high-priority issues: {join([c.title for c in critical], \", \")}"
+)
+
+if post_result.error {
+  return {
+    status: "slack_failed",
+    error: post_result.error.message,
+    found_critical: len(critical)
+  }
+}
+
+return {
+  status: "success",
+  critical_count: len(critical),
+  items: [c.title for c in critical]
+}
